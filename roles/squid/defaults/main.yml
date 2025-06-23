@@ -1,0 +1,58 @@
+# SPDX-License-Identifier: MIT
+---
+squid_acl:
+  localnet:
+    - type: src
+      value: 0.0.0.1-0.255.255.255
+    - type: src
+      value: 10.0.0.0/8
+    - type: src
+      value: 100.64.0.0/10
+    - type: src
+      value: 169.254.0.0/16
+    - type: src
+      value: 172.16.0.0/12
+    - type: src
+      value: 192.168.0.0/16
+    - type: src
+      value: fc00::/7
+    - type: src
+      value: fe80::/10
+  ssl_ports:
+    - type: port
+      value: 443
+  safe_ports:
+    - type: port
+      value: 80
+    - type: port
+      value: 443
+  connect:
+    - type: method
+      value: CONNECT
+  allowlist:
+    - type: dstdomain
+      value: '"/etc/squid/allowlist.txt"'
+squid_http_access:
+  - access: deny
+    acl: "!safe_ports"
+  - access: deny
+    acl: connect !ssl_ports
+  - access: allow
+    acl: localhost manager
+  - access: deny
+    acl: manager
+  - access: allow
+    acl: localhost
+  - access: allow
+    acl: localnet allowlist
+  - access: deny
+    acl: all
+squid_allowlist:
+  - .github.com
+  - .ansible.com
+squid_http_port: 3128
+squid_cache_log: /var/log/squid/cache.log
+squid_access_log: /var/log/squid/access.log default
+squid_debug_options: ALL,9
+squid_logformat:
+  default: "[%tl] %>a:%>p -> %rm %ru %Ss/%03>Hs"

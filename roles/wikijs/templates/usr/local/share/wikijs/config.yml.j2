@@ -1,0 +1,22 @@
+#######################################################################
+# Wiki.js - CONFIGURATION                                             #
+#######################################################################
+# Full documentation + examples:
+# https://docs.requarks.io/install
+
+port: {{ wikijs_port }}
+db:
+  type: mariadb
+  host: {{ wikijs_db_host }}
+  port: {{ wikijs_db_port }}
+  user: {{ wikijs_db_user }}
+  pass: {{ wikijs_db_password }}
+  db: {{ wikijs_db_name }}
+  ssl: false
+bindIP: {{ wikijs_bind_ip }}
+logLevel: {{ wikijs_log_level }}
+logFormat: {{ wikijs_log_format }}
+offline: {{ wikijs_offline_mode }}
+ha: {{ wikijs_ha }}
+dataPath: ./data
+bodyParserLimit: {{ wikijs_api_body_limit }}

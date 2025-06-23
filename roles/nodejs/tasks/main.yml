@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: MIT
+---
+- name: (Debian/Ubuntu) Install nodejs
+  ansible.builtin.apt:
+    name:
+      - nodejs
+      - npm
+    state: present
+  become: true
+  when: ansible_os_family == "Debian"
+- name: (AlmaLinux/Amazon Linux/RHEL) Install nodejs
+  ansible.builtin.dnf:
+    name:
+      - nodejs
+      - npm
+    state: present
+  become: true
+  when: ansible_os_family == "RedHat"

@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: MIT
+---
+mariadb_datadir: /var/lib/mysql
+# mariadb_socket: /var/lib/mysql/mysql.sock
+mariadb_log_error: /var/log/mariadb/mariadb.log
+# mariadb_pid_file: /run/mariadb/mariadb.pid
+mariadb_root_password: root

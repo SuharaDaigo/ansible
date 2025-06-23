@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Restart squid
+  ansible.builtin.systemd:
+    name: squid
+    state: restarted
+  become: true

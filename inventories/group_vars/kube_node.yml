@@ -1,0 +1,34 @@
+---
+fw_rules:
+  - rule: allow
+    proto: tcp
+    port: "22"
+    comment: ssh
+  - rule: allow
+    proto: tcp
+    port: "10250"
+    comment: Kubelet API
+  - rule: allow
+    proto: tcp
+    port: "10256"
+    comment: kube-proxy
+  - rule: allow
+    proto: tcp
+    port: "30000:32767"
+    comment: NodePort Services
+  - rule: allow
+    proto: udp
+    port: "8285"
+    comment: flannel udp backend
+  - rule: allow
+    proto: udp
+    port: "8472"
+    comment: flannel vxlan backend
+  - rule: allow
+    proto: tcp
+    port: "80"
+    comment: http
+  - rule: allow
+    proto: tcp
+    port: "443"
+    comment: https

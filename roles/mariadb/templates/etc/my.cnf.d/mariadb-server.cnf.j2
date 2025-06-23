@@ -1,0 +1,5 @@
+[mysqld]
+datadir={{ mariadb_datadir }}
+socket={{ mariadb_socket | default(mariadb_default.unix_socket[ansible_os_family]) }}
+log-error={{ mariadb_log_error }}
+pid-file={{ mariadb_pid_file | default(mariadb_default.pid_file[ansible_os_family]) }}

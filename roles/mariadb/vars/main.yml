@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: MIT
+---
+mariadb_default:
+  pid_file:
+    RedHat: /run/mysqld.pid
+    Debian: /run/mysqld/mysqld.pid
+  unix_socket:
+    RedHat: /var/lib/mysql/mysql.sock
+    Debian: /run/mysqld/mysqld.sock

@@ -1,0 +1,20 @@
+{% for acl_name, rules in squid_acl.items() %}
+{%   for rule in rules %}
+acl {{ acl_name }} {{ rule.type }} {{ rule.value }}
+{%   endfor %}
+{% endfor %}
+
+{% for rule in squid_http_access %}
+http_access {{ rule.access }} {{ rule.acl }}
+{% endfor %}
+
+http_port {{ squid_http_port }}
+
+{% for key, value in squid_logformat.items() %}
+logformat {{ key }} {{ value }}
+{% endfor %}
+
+access_log {{ squid_access_log }}
+cache_log {{ squid_cache_log }}
+
+debug_options {{ squid_debug_options }}

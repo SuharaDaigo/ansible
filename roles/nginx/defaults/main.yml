@@ -1,0 +1,9 @@
+---
+nginx_servers:
+  - server_name: localhost
+    listen: 80
+    access_log: /var/log/nginx/access.log main
+    location:
+      - path: /
+        root: /usr/share/nginx/html
+        index: index.html index.htm

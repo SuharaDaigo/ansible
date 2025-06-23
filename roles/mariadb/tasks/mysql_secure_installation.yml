@@ -1,0 +1,30 @@
+---
+- name: Set root password
+  community.mysql.mysql_user:
+    name: root
+    password: "{{ mariadb_root_password }}"
+    login_unix_socket: "{{ mariadb_socket | default(mariadb_default.unix_socket[ansible_os_family]) }}"
+    state: present
+  become: true
+- name: Create /root/.my.cnf
+  # 初期のrootにパスワード設定なしの状態で、login_passwordしようとすると失敗する
+  # /root/.my.cnfを作り、それを参照すれば冪等性あり
+  ansible.builtin.template:
+    src: root/.my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+- name: Remove anonymous users
+  community.mysql.mysql_user:
+    name: ""
+    host: localhost
+    state: absent
+  become: true
+- name: Remove test database
+  community.mysql.mysql_db:
+    name:
+      - test
+    state: absent
+  become: true

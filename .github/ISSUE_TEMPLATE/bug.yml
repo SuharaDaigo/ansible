@@ -1,0 +1,50 @@
+---
+name: Bug Report
+description: 障害報告をしたい
+labels:
+  - kind/bug
+body:
+  - type: textarea
+    attributes:
+      label: 概要
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 再現手順
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 期待する動作
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 実際の動作
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Ansible version
+      render: text
+      description: |
+        ansible --versionの出力
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: OS
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: エラーログ
+      render: text
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: その他
+    validations:
+      required: false

@@ -1,0 +1,29 @@
+---
+- name: Install ufw
+  ansible.builtin.apt:
+    name:
+      - ufw
+    state: present
+  become: true
+- name: Start ufw
+  ansible.builtin.systemd:
+    name: ufw
+    enabled: true
+    state: started
+  become: true
+- name: Add rules
+  community.general.ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+    from_ip: "{{ item.src | default('any') }}"
+    to_ip: "{{ item.dest | default('any') }}"
+    comment: "{{ item.comment | default('') }}"
+    state: reloaded
+  loop: "{{ fw_rules }}"
+  become: true
+- name: Enable ufw
+  community.general.ufw:
+    state: enabled
+    policy: deny
+  become: true

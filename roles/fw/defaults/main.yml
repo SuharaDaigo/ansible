@@ -1,0 +1,5 @@
+---
+fw_rules:
+  - rule: allow
+    proto: tcp
+    port: "22"

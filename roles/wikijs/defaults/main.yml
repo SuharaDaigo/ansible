@@ -1,0 +1,16 @@
+---
+wikijs_user: wikijs
+wikijs_group: wikijs
+wikijs_dir: /usr/local/share/wikijs
+wikijs_port: 3000
+wikijs_db_host: localhost
+wikijs_db_port: 3306
+wikijs_db_user: wikijs
+wikijs_db_password: wikijs
+wikijs_db_name: wikijs
+wikijs_bind_ip: 0.0.0.0
+wikijs_log_level: info
+wikijs_log_format: json
+wikijs_offline_mode: "false"
+wikijs_ha: "false"
+wikijs_api_body_limit: 5mb

@@ -1,0 +1,5 @@
+---
+- name: Install firewall
+  hosts: localhost
+  roles:
+    - fw

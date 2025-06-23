@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Restart mariadb
+  ansible.builtin.systemd:
+    name: mariadb
+    state: restarted
+  become: true

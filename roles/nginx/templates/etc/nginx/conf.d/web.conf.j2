@@ -1,0 +1,17 @@
+{% for server in nginx_servers %}
+server {
+    listen {{ server.listen }};
+    server_name {{ server.server_name }};
+    access_log {{ server.access_log }};
+
+{%  for location in server.location %}
+    location {{ location.path }} {
+{%      for key, value in location.items() %}
+{%          if not key == 'path' %}
+        {{ key }} {{ value }};
+{%          endif %}
+{%      endfor %}
+    }
+{%  endfor %}
+}
+{% endfor %}

@@ -1,0 +1,32 @@
+---
+- name: Install nodejs
+  hosts: wikijs
+  roles:
+    - nodejs
+- name: Install mariadb
+  hosts: wikijs
+  roles:
+    - mariadb
+  tasks:
+    - name: Create database
+      community.mysql.mysql_db:
+        name:
+          - "{{ wikijs_db_name }}"
+        state: present
+      become: true
+    - name: Create database user
+      community.mysql.mysql_user:
+        name: "{{ wikijs_db_user }}"
+        password: "{{ wikijs_db_password }}"
+        priv: "{{ wikijs_db_name }}.*:ALL"
+        state: present
+      become: true
+- name: Install wikijs
+  hosts: wikijs
+  roles:
+    - wikijs
+- name: Install nginx
+  hosts: wikijs
+  roles:
+    - nginx
+  become: true

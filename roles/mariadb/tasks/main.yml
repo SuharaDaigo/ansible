@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: MIT
+---
+- name: (Debian/Ubuntu) Install mariadb
+  ansible.builtin.apt:
+    name:
+      - mariadb-server
+      - python3-pymysql
+    state: present
+  become: true
+  when: ansible_os_family == "Debian"
+- name: (AlmaLinux/RHEL) Install mariadb
+  ansible.builtin.dnf:
+    name:
+      - mariadb-server
+      - python3-pymysql
+    state: present
+  become: true
+  when: ansible_os_family == "RedHat"
+- name: Start mariadb
+  ansible.builtin.systemd:
+    name: mariadb
+    state: started
+    enabled: true
+  become: true
+- name: (Debian/Ubuntu) Deploy config file
+  ansible.builtin.template:
+    src: etc/my.cnf.d/mariadb-server.cnf.j2
+    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Restart mariadb
+  when: ansible_os_family == "Debian"
+- name: (AlmaLinux/RHEL) Deploy config file
+  ansible.builtin.template:
+    src: etc/my.cnf.d/mariadb-server.cnf.j2
+    dest: /etc/my.cnf.d/mariadb-server.cnf
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Restart mariadb
+  when: ansible_os_family == "RedHat"
+- name: Run mysql_secure_installation
+  ansible.builtin.include_tasks:
+    file: mysql_secure_installation.yml

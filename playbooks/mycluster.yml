@@ -1,0 +1,128 @@
+---
+- name: Install Kubernetes
+  ansible.builtin.import_playbook: kubernetes_sigs.kubespray.cluster
+  vars:
+    kube_version: v1.30.4
+    kube_network_plugin: flannel
+    kubeconfig_localhost: true
+    kubectl_localhost: true
+    helm_enabled: true
+    metrics_server_enabled: true
+    cert_manager_enabled: true
+    kube_proxy_strict_arp: true
+    metallb_enabled: true
+    metallb_speaker_enabled: true
+    metallb_namespace: metallb-system
+    metallb_config:
+      address_pools:
+        primary:
+          ip_range:
+            - 192.168.100.100-192.168.100.200
+          auto_assign: true
+      layer2:
+        - primary
+    ingress_nginx_enabled: true
+    ingress_nginx_namespace: ingress-nginx
+    ingress_nginx_termination_grace_period_seconds: 300
+    ingress_nginx_class: nginx
+    ingress_nginx_configmap:
+      map-hash-bucket-size: "128"
+      ssl-protocols: "TLSv1.2 TLSv1.3"
+- name: Install firewall
+  hosts: kube_control_plane,kube_node
+  roles:
+    - fw
+- name: Install fluent-bit
+  hosts: kube_control_plane
+  tasks:
+    - name: Add fluent chart repo
+      kubernetes.core.helm_repository:
+        name: fluent
+        repo_url: https://fluent.github.io/helm-charts
+    - name: Deploy fluent-bit
+      kubernetes.core.helm:
+        name: fluent-bit
+        chart_ref: fluent/fluent-bit
+        chart_version: 0.48.3
+        namespace: kube-system
+        state: present
+        values:
+          config:
+            filters: |
+              [FILTER]
+                  Name kubernetes
+                  Match kube.*
+                  Merge_Log On
+                  Keep_Log Off
+                  K8S-Logging.Parser On
+                  K8S-Logging.Exclude On
+
+              [FILTER]
+                  Name nest
+                  Match kube.*
+                  Operation lift
+                  Nest_under kubernetes
+            outputs: |
+              [OUTPUT]
+                  name syslog
+                  match kube.*
+                  host 192.168.100.2
+                  port 514
+                  mode udp
+                  syslog_message_key log
+                  syslog_hostname_key namespace_name
+                  syslog_appname_key pod_name
+                  syslog_procid_key container_name
+
+              [OUTPUT]
+                  name syslog
+                  match host.*
+                  host 192.168.100.2
+                  port 514
+                  mode udp
+                  syslog_message_key log
+- name: Install monitoring
+  hosts: kube_control_plane
+  tasks:
+    - name: Add prometheus chart repo
+      kubernetes.core.helm_repository:
+        name: prometheus-community
+        repo_url: https://prometheus-community.github.io/helm-charts
+    - name: Add grafana chart repo
+      kubernetes.core.helm_repository:
+        name: grafana
+        repo_url: https://grafana.github.io/helm-charts
+    - name: Install kube-prometheus-stack
+      kubernetes.core.helm:
+        name: kube-prometheus-stack
+        chart_ref: prometheus-community/kube-prometheus-stack
+        chart_version: 67.6.0
+        namespace: monitoring
+        create_namespace: true
+        state: present
+        values:
+          prometheus:
+            prometheusSpec:
+              additionalScrapeConfigs:
+                - job_name: kubernetes-pods
+                  kubernetes_sd_configs:
+                    - role: pod
+                  relabel_configs:
+                    - source_labels:
+                        [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+                      action: keep
+                      regex: true
+                    - source_labels:
+                        [__meta_kubernetes_pod_annotation_prometheus_io_path]
+                      action: replace
+                      target_label: __metrics_path__
+                      regex: (.+)
+                    - source_labels:
+                        [
+                          __address__,
+                          __meta_kubernetes_pod_annotation_prometheus_io_port,
+                        ]
+                      action: replace
+                      regex: ([^:]+)(?::\d+)?;(\d+)
+                      replacement: ${1}:${2}
+                      target_label: __address__
