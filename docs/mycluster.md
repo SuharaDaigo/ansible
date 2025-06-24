@@ -14,7 +14,14 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ansible-galaxy install -r requirements.yml
 ansible-playbook playbooks/mycluster.yml -b
-cp -ip inventories/mycluster/artifacts/admin.conf ~/.kube/config
+mkdir -p ~/.kube
+cp -ip inventories/artifacts/admin.conf ~/.kube/config
+chmod 600 ~/.kube/config
+```
+
+## 再構築
+```sh
+ansible-playbook kubernetes_sigs.kubespray.reset -b
 ```
 
 ## Kubernetes API を叩く
