@@ -7,7 +7,14 @@
 ## 構築
 
 ```sh
-ansible-playbook playbooks/mycluster.yml --become
+sudo apt update
+sudo apt install python3.12-venv
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+ansible-galaxy install -r requirements.yml
+ansible-playbook playbooks/mycluster.yml -b
+cp -ip inventories/mycluster/artifacts/admin.conf ~/.kube/config
 ```
 
 ## Kubernetes API を叩く
@@ -52,13 +59,3 @@ cd inventories/artifacts
 | 6    | UDP        | 8472        | flannel vxlan backend |
 | 7    | TCP        | 80          | http                  |
 | 8    | TCP        | 443         | https                 |
-
-## 物理
-
-| 名前                                                                                   | 単価      | 個数 | 備考                      |
-| -------------------------------------------------------------------------------------- | --------- | ---- | ------------------------- |
-| [Raspberry Pi 4 Model B 8GB](https://raspberry-pi.ksyic.com/?pdp.id=552)               | 16,800 円 | 3    |                           |
-| [アクリルケース付き PoE HAT](https://www.amazon.co.jp/dp/B097NCD6FW)                   | 3,599 円  | 3    |                           |
-| [TP-Link TL-SG105PE](https://www.amazon.co.jp/dp/B08GDC61NS)                           | 6,667 円  | 1    | PoE 給電用                |
-| [microSD カード 64GB](https://www.amazon.co.jp/dp/B07DVJ86SS)                          | 980 円    | 3    |                           |
-| [HDMI (メス) - micro HDMI (オス) 変換アダプタ](https://www.amazon.co.jp/dp/B01017VGR2) | 970 円    | 1    | OS の初期化・ssh の設定用 |
