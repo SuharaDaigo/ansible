@@ -8,13 +8,15 @@
 
 ```sh
 sudo apt update
-sudo apt install python3.12-venv
+sudo apt install python3.12-venv ansible
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
 ansible-galaxy install -r requirements.yml
 ansible-playbook playbooks/mycluster.yml -b
-cp -ip inventories/mycluster/artifacts/admin.conf ~/.kube/config
+mkdir ~/.kube
+cp -ip inventories/artifacts/admin.conf ~/.kube/config
+sudo chmod 600 ~/.kube/config
 ```
 
 ## Kubernetes API を叩く
