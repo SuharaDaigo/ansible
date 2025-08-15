@@ -2,14 +2,13 @@
 - name: Install Kubernetes
   ansible.builtin.import_playbook: kubernetes_sigs.kubespray.cluster
   vars:
-    kube_version: 1.32.5
+    kube_version: 1.33.3
     kube_network_plugin: flannel
     kubeconfig_localhost: true
     kubectl_localhost: true
     helm_enabled: true
     metrics_server_enabled: true
     cert_manager_enabled: true
-    argocd_version: 2.14.5
     argocd_enabled: true
     argocd_namespace: argocd
     argocd_server_type: LoadBalancer
