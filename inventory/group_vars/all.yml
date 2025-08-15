@@ -31,3 +31,6 @@
 # argocd_https_proxy: http://proxy.example.com:3128
 # argocd_no_proxy: 127.0.0.1,localhost,.svc,.cluster.local
 
+# ArgoCD Service Configuration
+argocd_server_service_type: LoadBalancer
+

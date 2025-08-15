@@ -8,11 +8,10 @@
 bash deploy.sh
 ```
 
-## Kubernetes API を叩く
-
-構築後に Ansible の Control node 上に kubeconfig（`admin.conf`） と `kubectl` がダウンロードされる。
-
-これらを使用し Kubernetes API に接続できる。
+## 破壊
+```sh
+source venv/bin/activate && ansible-playbook kubernetes_sigs.kubespray.reset -b -K
+```
 
 ## Firewall
 
