@@ -1,12 +1,12 @@
 [kube_control_plane]
-172.16.100.1 ansible_user=ubuntu ansible_become=yes
+master1 ansible_host=172.16.100.1 ansible_user=ubuntu ansible_become=yes
 
 [etcd:children]
 kube_control_plane
 
 [kube_node]
-172.16.100.2 ansible_user=ubuntu ansible_become=yes
-172.16.100.3 ansible_user=ubuntu ansible_become=yes
+worker1 ansible_host=172.16.100.2 ansible_user=ubuntu ansible_become=yes
+worker2 ansible_host=172.16.100.3 ansible_user=ubuntu ansible_become=yes
 
 [k8s_cluster:children]
 kube_node

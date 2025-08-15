@@ -2,6 +2,10 @@
 
 [kubespray](https://github.com/kubernetes-sigs/kubespray) を使用して、おうち kubernetes クラスターを構築する。
 
+## バージョン
+* kubespray
+v2.28.0
+
 ## 構築
 
 ```sh
