@@ -9,6 +9,7 @@
     helm_enabled: true
     metrics_server_enabled: true
     cert_manager_enabled: true
+    argocd_version: 2.14.5
     argocd_enabled: true
     argocd_namespace: argocd
     argocd_server_type: LoadBalancer
