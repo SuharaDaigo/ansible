@@ -167,3 +167,5 @@ roles/**/inventory
 
 # 依存ロールは除外
 roles/nginxinc.nginx
+
+id_ed25519
