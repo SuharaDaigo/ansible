@@ -1,5 +1,0 @@
----
-- name: Install wikijs
-  hosts: localhost
-  roles:
-    - wikijs

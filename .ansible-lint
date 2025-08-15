@@ -3,4 +3,3 @@ exclude_paths:
   - .pre-commit-config.yaml
   - .github
   - requirements.yml
-  - roles/nginxinc.nginx

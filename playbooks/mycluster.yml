@@ -9,6 +9,8 @@
     helm_enabled: true
     metrics_server_enabled: true
     cert_manager_enabled: true
+    # Enable Argo CD addon
+    argocd_enabled: true
     kube_proxy_strict_arp: true
     metallb_enabled: true
     metallb_speaker_enabled: true
@@ -25,7 +27,6 @@
     ingress_nginx_namespace: ingress-nginx
     ingress_nginx_termination_grace_period_seconds: 300
     ingress_nginx_class: nginx
-    # Ingress Controller を LoadBalancer として公開
     ingress_nginx_service_type: LoadBalancer
     ingress_nginx_configmap:
       map-hash-bucket-size: "128"
@@ -68,7 +69,7 @@
               [OUTPUT]
                   name syslog
                   match kube.*
-                  host 172.16.10.1
+                  host 172.16.100.1
                   port 514
                   mode udp
                   syslog_message_key log
@@ -79,52 +80,7 @@
               [OUTPUT]
                   name syslog
                   match host.*
-                  host 172.16.10.1
+                  host 172.16.100.1
                   port 514
                   mode udp
                   syslog_message_key log
-- name: Install monitoring
-  hosts: kube_control_plane
-  tasks:
-    - name: Add prometheus chart repo
-      kubernetes.core.helm_repository:
-        name: prometheus-community
-        repo_url: https://prometheus-community.github.io/helm-charts
-    - name: Add grafana chart repo
-      kubernetes.core.helm_repository:
-        name: grafana
-        repo_url: https://grafana.github.io/helm-charts
-    - name: Install kube-prometheus-stack
-      kubernetes.core.helm:
-        name: kube-prometheus-stack
-        chart_ref: prometheus-community/kube-prometheus-stack
-        chart_version: 67.6.0
-        namespace: monitoring
-        create_namespace: true
-        state: present
-        values:
-          prometheus:
-            prometheusSpec:
-              additionalScrapeConfigs:
-                - job_name: kubernetes-pods
-                  kubernetes_sd_configs:
-                    - role: pod
-                  relabel_configs:
-                    - source_labels:
-                        [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
-                      action: keep
-                      regex: true
-                    - source_labels:
-                        [__meta_kubernetes_pod_annotation_prometheus_io_path]
-                      action: replace
-                      target_label: __metrics_path__
-                      regex: (.+)
-                    - source_labels:
-                        [
-                          __address__,
-                          __meta_kubernetes_pod_annotation_prometheus_io_port,
-                        ]
-                      action: replace
-                      regex: ([^:]+)(?::\d+)?;(\d+)
-                      replacement: ${1}:${2}
-                      target_label: __address__

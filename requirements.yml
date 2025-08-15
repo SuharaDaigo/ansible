@@ -3,6 +3,5 @@ collections:
   - name: https://github.com/kubernetes-sigs/kubespray
     type: git
     version: v2.26.0
-roles:
-  - name: nginxinc.nginx
-    version: 0.25.0
+  - name: kubernetes.core
+  # version: pinned if needed

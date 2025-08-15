@@ -2,21 +2,10 @@
 
 [kubespray](https://github.com/kubernetes-sigs/kubespray) を使用して、おうち kubernetes クラスターを構築する。
 
-<img src="https://raw.githubusercontent.com/CASL0/ansible/images/mycluster.jpeg" width="40%" />
-
 ## 構築
 
 ```sh
-sudo apt update
-sudo apt install python3.12-venv ansible
-python3 -m venv venv
-source venv/bin/activate
-pip3 install -r requirements.txt
-ansible-galaxy install -r requirements.yml
-ansible-playbook playbooks/mycluster.yml -b -K
-mkdir ~/.kube
-cp -ip inventory/artifacts/admin.conf ~/.kube/config
-sudo chmod 600 ~/.kube/config
+bash deploy.sh
 ```
 
 ## Kubernetes API を叩く
@@ -24,15 +13,6 @@ sudo chmod 600 ~/.kube/config
 構築後に Ansible の Control node 上に kubeconfig（`admin.conf`） と `kubectl` がダウンロードされる。
 
 これらを使用し Kubernetes API に接続できる。
-
-```sh
-cd inventories/artifacts
-./kubectl.sh get nodes
-```
-
-## 構成
-
-<img src="https://raw.githubusercontent.com/CASL0/ansible/images/k8s.svg" />
 
 ## Firewall
 
