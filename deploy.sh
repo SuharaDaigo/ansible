@@ -9,3 +9,4 @@ ansible-playbook playbooks/mycluster.yml -b -K
 mkdir ~/.kube
 cp -ip inventory/artifacts/admin.conf ~/.kube/config
 sudo chmod 600 ~/.kube/config
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
