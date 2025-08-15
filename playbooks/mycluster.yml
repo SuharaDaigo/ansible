@@ -9,8 +9,10 @@
     helm_enabled: true
     metrics_server_enabled: true
     cert_manager_enabled: true
-    # Enable Argo CD addon
     argocd_enabled: true
+    argocd_namespace: argocd
+    argocd_server_type: LoadBalancer
+    argocd_admin_password: "password"
     kube_proxy_strict_arp: true
     metallb_enabled: true
     metallb_speaker_enabled: true
