@@ -4,4 +4,3 @@ collections:
     type: git
     version: v2.28.0
   - name: kubernetes.core
-  # version: pinned if needed

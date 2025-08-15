@@ -2,7 +2,7 @@
 - name: Install Kubernetes
   ansible.builtin.import_playbook: kubernetes_sigs.kubespray.cluster
   vars:
-    kube_version: v1.33.3
+    kube_version: 1.33.3
     kube_network_plugin: flannel
     kubeconfig_localhost: true
     kubectl_localhost: true
