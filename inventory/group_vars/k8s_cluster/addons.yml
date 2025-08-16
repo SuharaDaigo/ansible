@@ -1,0 +1,29 @@
+argocd_enabled: true
+argocd_namespace: argocd
+argocd_admin_password: password
+argocd_server_service_type: LoadBalancer
+
+metallb_enabled: true
+metallb_speaker_enabled: true
+metallb_namespace: metallb-system
+metallb_config:
+  address_pools:
+    primary:
+      ip_range:
+        - 172.16.200.1-172.16.200.254
+      auto_assign: true
+  layer2:
+    - primary
+
+ingress_nginx_enabled: true
+ingress_nginx_namespace: ingress-nginx
+ingress_nginx_termination_grace_period_seconds: 300
+ingress_nginx_class: nginx
+ingress_nginx_service_type: LoadBalancer
+ingress_nginx_configmap:
+  map-hash-bucket-size: "128"
+  ssl-protocols: "TLSv1.2 TLSv1.3"
+
+helm_enabled: true
+
+cert_manager_enabled: true
